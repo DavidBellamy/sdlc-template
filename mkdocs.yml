@@ -1,0 +1,49 @@
+site_name: sdlc-template
+site_description: A process-first template repository with a complete SDLC.
+repo_url: https://github.com/davidbellamy/sdlc-template
+repo_name: davidbellamy/sdlc-template
+docs_dir: docs
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - Process:
+      - The lifecycle: process/lifecycle.md
+      - RFCs and decision records: process/decision-records.md
+  - Architecture:
+      - L1 Context: architecture/context.md
+      - L2 Containers: architecture/containers.md
+      - L3 Components: architecture/components.md
+      - Interface contracts: architecture/interfaces.md
+  - Decisions:
+      - ADR log: adr/index.md
+      - ADR template: adr/0000-template.md
+      - ADR-0001 Record decisions: adr/0001-record-architecture-decisions.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - tables
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format

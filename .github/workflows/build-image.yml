@@ -1,0 +1,41 @@
+name: build-image
+
+# Demonstrates the shift-left build gate from docs/process/lifecycle.md:
+# the image is BUILT on every PR (so "the Dockerfile is broken" is caught
+# before merge), but NOT pushed. Deployment (push to a registry) belongs in a
+# separate post-merge CD step, gated by a canary + rollback, never as a
+# pre-merge gate (you cannot deploy main before main exists).
+on:
+  push:
+    branches: [main]
+    paths:
+      - docker/**
+      - pyproject.toml
+      - .github/workflows/build-image.yml
+  pull_request:
+    paths:
+      - docker/**
+      - pyproject.toml
+      - .github/workflows/build-image.yml
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build image (no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/Dockerfile
+          push: false
+          tags: sdlc-template:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      # To turn this into CD: on push-to-main only, add a registry login step
+      # and set push: true, then a post-merge smoke job that rolls back on
+      # failure. Keep PRs build-only.

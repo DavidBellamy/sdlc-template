@@ -1,0 +1,7 @@
+# No freeform issues: every issue enters through a structured Form so it is
+# triaged at creation. Questions go to Discussions instead.
+blank_issues_enabled: false
+contact_links:
+  - name: Question or discussion
+    url: https://github.com/davidbellamy/sdlc-template/discussions
+    about: Ask questions and discuss ideas here, not in the issue tracker.

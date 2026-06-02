@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Environments
+.venv/
+venv/
+
+# Tooling caches
+.ruff_cache/
+.ty_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# MkDocs build output
+site/
+
+# OS / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/

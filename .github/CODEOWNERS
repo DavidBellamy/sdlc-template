@@ -1,0 +1,11 @@
+# Component ownership = the Responsible/Accountable of RACI, machine-enforced.
+# A PR touching an owned path requires that owner's review (only when branch
+# protection sets required_approving_review_count > 0). The Consulted/Informed
+# columns that CODEOWNERS cannot express live in plans/raci.md.
+#
+# Format: <path-glob>  <owner...>
+# More specific lines win. Add per-area owners as the project grows, e.g.:
+#   /src/payments/   @alice @bob
+#   /docs/           @carol
+
+*   @DavidBellamy

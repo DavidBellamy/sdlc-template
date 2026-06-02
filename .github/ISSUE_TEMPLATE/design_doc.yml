@@ -1,0 +1,46 @@
+name: Design doc (RFC)
+description: Propose a design for review before you implement it
+title: "[design]: "
+labels: ["type: design"]
+body:
+  - type: markdown
+    attributes:
+      value: >
+        This issue **is** the RFC: the mutable, threaded, permanent home for the
+        proposal and its discussion. When it is accepted, do not copy it into the
+        repo; instead record the resulting decision(s) as ADR(s) under
+        `docs/adr/` that link back to this issue. One RFC may produce several
+        ADRs. See `docs/process/decision-records.md`.
+  - type: textarea
+    id: context
+    attributes:
+      label: Context / problem
+      description: What forces are at play? Why now?
+    validations:
+      required: true
+  - type: textarea
+    id: goals
+    attributes:
+      label: Goals and non-goals
+      description: Split goals into invariants (must hold) and hypotheses (being tested). State non-goals explicitly.
+    validations:
+      required: true
+  - type: textarea
+    id: design
+    attributes:
+      label: Proposed design
+      description: Interfaces and entities first. A C4 container or component sketch (mermaid) is welcome.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What else was on the table, and why not?
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks and spikes needed
+      description: What unknowns should be de-risked with a time-boxed spike before this design locks?

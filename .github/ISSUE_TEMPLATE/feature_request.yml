@@ -1,0 +1,43 @@
+name: Feature request
+description: Propose a new capability
+title: "[feature]: "
+labels: ["type: feature"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What problem does this solve, and who has it? Describe the pain, not the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: dropdown
+    id: roadmap-fit
+    attributes:
+      label: Roadmap fit
+      description: Which milestone does this belong to? Forces triage at creation.
+      options:
+        - v0.1.0
+        - v0.2.0
+        - Later
+        - Outside the roadmap
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Concrete, testable checkboxes. The PR will copy these and tick them.
+      value: |
+        - [ ]
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered

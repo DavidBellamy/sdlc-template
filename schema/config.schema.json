@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/davidbellamy/sdlc-template/schema/config.schema.json",
+  "title": "Example project config",
+  "description": "A machine-checkable interface contract. Lives next to the code (not in docs/) because it is a build/validation input, so PR review sees the contract and its implementation together and CI can enforce it. See docs/architecture/interfaces.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "version"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Project name.",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version, major.minor.patch.",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "maintainers": {
+      "type": "array",
+      "description": "GitHub handles of maintainers.",
+      "items": { "type": "string", "pattern": "^@?[A-Za-z0-9-]+$" },
+      "minItems": 1
+    }
+  }
+}

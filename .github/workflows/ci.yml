@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - run: uv sync --extra dev
+      - run: uv run ruff format --check .
+      - run: uv run ruff check .
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - run: uv sync --extra dev
+      - run: uv run ty check
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - run: uv sync --extra dev --python ${{ matrix.python-version }}
+      - run: uv run pytest
+
+  # Umbrella aggregator. Branch protection requires THIS single stable check
+  # name, so the matrix and individual jobs above can be reshaped freely
+  # without ever editing the protection rules. See docs/process/lifecycle.md.
+  lint-typecheck-test:
+    if: always()
+    needs: [lint, typecheck, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require all upstream jobs to have succeeded
+        run: |
+          results="${{ needs.lint.result }} ${{ needs.typecheck.result }} ${{ needs.test.result }}"
+          echo "upstream results: ${results}"
+          for r in ${results}; do
+            if [ "${r}" != "success" ]; then
+              echo "a required job did not succeed" >&2
+              exit 1
+            fi
+          done
