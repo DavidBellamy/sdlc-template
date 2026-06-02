@@ -12,6 +12,14 @@ whose rationale would otherwise be lost.
 
 ## [Unreleased]
 
+### Fixed
+
+- CI `test` matrix now runs pytest in the correct per-version environment with
+  the dev extra (`uv run --extra dev --python <ver> pytest`), fixing a missing
+  pytest on the 3.13 leg (#1).
+- `docs` workflow step name no longer contains a colon that broke YAML parsing
+  and prevented the workflow from loading (#1).
+
 ## [0.1.0] - 2026-06-02
 
 ### Added
