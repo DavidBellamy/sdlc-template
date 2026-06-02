@@ -12,6 +12,11 @@ whose rationale would otherwise be lost.
 
 ## [Unreleased]
 
+### Added
+
+- Dependabot now watches the `docker` ecosystem (base images in
+  `docker/Dockerfile`) (#3).
+
 ### Fixed
 
 - CI `test` matrix now runs pytest in the correct per-version environment with

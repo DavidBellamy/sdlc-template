@@ -23,3 +23,12 @@ updates:
           - "ty"
           - "pytest*"
           - "pre-commit"
+
+  # Watch the base images in docker/Dockerfile (python, uv).
+  - package-ecosystem: "docker"
+    directory: "/docker"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    commit-message:
+      prefix: "docker"
