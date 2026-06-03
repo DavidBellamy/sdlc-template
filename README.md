@@ -14,11 +14,11 @@ place from the first commit.
 | --- | --- | --- |
 | The process itself | [`docs/process/lifecycle.md`](docs/process/lifecycle.md) | The full SDLC, from stakeholders to launch |
 | Goals / non-goals per milestone | [`plans/goals.md`](plans/goals.md) | Working PM doc, scoped to a release |
-| Ownership (R/A) | [`.github/CODEOWNERS`](.github/CODEOWNERS) | Machine-enforced; gates review |
-| Ownership (C/I) | [`plans/raci.md`](plans/raci.md) | The parts CODEOWNERS cannot express |
-| Architecture (C4 L1-L3) | [`docs/architecture/`](docs/architecture/) | Human-authored, published via MkDocs |
+| Ownership (R/A in RACI) | [`.github/CODEOWNERS`](.github/CODEOWNERS) | Machine-enforced; gates review |
+| Ownership (C/I in RACI) | [`plans/raci.md`](plans/raci.md) | The parts CODEOWNERS cannot express |
+| Architecture ([C4](https://c4model.com/) L1-L3) | [`docs/architecture/`](docs/architecture/) | Human-authored, published via MkDocs |
 | Decisions | [`docs/adr/`](docs/adr/) | Immutable, terse, one per decision |
-| Proposals (RFCs) | GitHub Issues (`design_doc` form) | Mutable, threaded, permanent on GitHub |
+| Proposals ([RFCs](https://en.wikipedia.org/wiki/Request_for_Comments)) | GitHub Issues (`design_doc` form) | Mutable, threaded, permanent on GitHub |
 | Machine-checkable interfaces | [`schema/`](schema/), `src/**` type sigs | Build inputs, co-located with code |
 | Prose interface contracts | [`docs/architecture/interfaces.md`](docs/architecture/interfaces.md) | For CLI/shell/env contracts with no machine format |
 | Code standards | [`pyproject.toml`](pyproject.toml), [`.pre-commit-config.yaml`](.pre-commit-config.yaml) | Executable and enforced, not prose |
