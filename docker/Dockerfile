@@ -1,7 +1,7 @@
 # Minimal image for the example package. Built (not pushed) on every PR by
 # .github/workflows/build-image.yml to gate "does the image still build" before
 # merge. Uses uv for fast, reproducible installs.
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 # Copy the uv binary from its official image (no curl|sh needed).
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
