@@ -9,6 +9,93 @@ permissions:
   contents: read
 
 jobs:
+  branch_name:
+    name: branch-name
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate pull request source branch
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BRANCH_NAME: ${{ github.head_ref }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          set -euo pipefail
+
+          if [[ "${EVENT_NAME}" != "pull_request" ]]; then
+            echo "Not a pull request; skipping branch-name validation."
+            exit 0
+          fi
+
+          echo "Branch: ${BRANCH_NAME}"
+
+          # Dependabot is configured for this repo; don't force bot branches into
+          # the human branch-name convention.
+          if [[ "${ACTOR}" == "dependabot[bot]" || "${BRANCH_NAME}" == dependabot/* ]]; then
+            echo "Dependabot branch; skipping human branch-name policy."
+            exit 0
+          fi
+
+          if (( ${#BRANCH_NAME} > 80 )); then
+            echo "::error::Branch name is too long: ${#BRANCH_NAME} characters. Keep it at or below 80."
+            exit 1
+          fi
+
+          # Keep these branch types in sync with CONTRIBUTING.md.
+          issue_required='^(feature|fix|design|refactor|perf|spike)/[1-9][0-9]*-[a-z0-9]+(-[a-z0-9]+)*$'
+          issue_or_no_issue='^(docs|test|ci|build|deps|chore)/([1-9][0-9]*|no-issue)-[a-z0-9]+(-[a-z0-9]+)*$'
+          release_or_hotfix='^(release|hotfix)/[0-9]+\.[0-9]+\.[0-9]+(-[a-z0-9]+(-[a-z0-9]+)*)?$'
+
+          if [[ "${BRANCH_NAME}" =~ ${issue_required} ]] ||
+             [[ "${BRANCH_NAME}" =~ ${issue_or_no_issue} ]] ||
+             [[ "${BRANCH_NAME}" =~ ${release_or_hotfix} ]]; then
+            echo "Branch name is valid."
+            exit 0
+          fi
+
+          cat <<'EOF' >&2
+          Invalid branch name.
+
+          Use one of:
+
+            feature/<issue>-<short-kebab-description>
+            fix/<issue>-<short-kebab-description>
+            design/<issue>-<short-kebab-description>
+            refactor/<issue>-<short-kebab-description>
+            perf/<issue>-<short-kebab-description>
+            spike/<issue>-<short-kebab-description>
+
+            docs/<issue-or-no-issue>-<short-kebab-description>
+            test/<issue-or-no-issue>-<short-kebab-description>
+            ci/<issue-or-no-issue>-<short-kebab-description>
+            build/<issue-or-no-issue>-<short-kebab-description>
+            deps/<issue-or-no-issue>-<short-kebab-description>
+            chore/<issue-or-no-issue>-<short-kebab-description>
+
+            release/<semver>
+            hotfix/<semver>-<short-kebab-description>
+
+          Examples:
+
+            feature/12-add-project-bootstrap-command
+            fix/18-handle-missing-roadmap-version
+            design/21-record-release-gate-decision
+            docs/no-issue-fix-typo
+            ci/no-issue-pin-action-version
+            deps/no-issue-bump-ruff
+            release/0.2.0
+            hotfix/0.2.1-fix-docs-publish
+
+          Rules:
+
+            - lowercase only
+            - kebab-case after the issue number or no-issue marker
+            - no spaces, underscores, personal names, or vague names like pr/foo
+            - no-issue is only for docs, test, ci, build, deps, and chore
+          EOF
+
+          exit 1
+
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -46,12 +133,12 @@ jobs:
   # without ever editing the protection rules. See docs/process/lifecycle.md.
   lint-typecheck-test:
     if: always()
-    needs: [lint, typecheck, test]
+    needs: [branch_name, lint, typecheck, test]
     runs-on: ubuntu-latest
     steps:
       - name: Require all upstream jobs to have succeeded
         run: |
-          results="${{ needs.lint.result }} ${{ needs.typecheck.result }} ${{ needs.test.result }}"
+          results="${{ needs.branch_name.result }} ${{ needs.lint.result }} ${{ needs.typecheck.result }} ${{ needs.test.result }}"
           echo "upstream results: ${results}"
           for r in ${results}; do
             if [ "${r}" != "success" ]; then
