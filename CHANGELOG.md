@@ -17,6 +17,12 @@ whose rationale would otherwise be lost.
 - Dependabot now watches the `docker` ecosystem (base images in
   `docker/Dockerfile`) (#3).
 
+### Changed
+
+- Standardized on Python 3.13 across `requires-python`, ruff/ty config,
+  `.python-version`, the CI matrix, and the Docker base image; regenerated
+  `uv.lock` (#13).
+
 ### Fixed
 
 - CI `test` matrix now runs pytest in the correct per-version environment with
