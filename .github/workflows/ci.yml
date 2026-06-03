@@ -128,17 +128,53 @@ jobs:
           enable-cache: true
       - run: uv run --extra dev --python ${{ matrix.python-version }} pytest
 
+  changelog:
+    name: changelog
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Require a CHANGELOG entry
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+        run: |
+          set -euo pipefail
+
+          if [[ "${EVENT_NAME}" != "pull_request" ]]; then
+            echo "Not a pull request; skipping CHANGELOG check."
+            exit 0
+          fi
+
+          # Escape hatch: trivial changes can opt out with the skip-changelog label.
+          if grep -qiw 'skip-changelog' <<<"${LABELS}"; then
+            echo "skip-changelog label present; skipping."
+            exit 0
+          fi
+
+          git fetch --quiet origin "${BASE_REF}"
+          if git diff --name-only "origin/${BASE_REF}...HEAD" | grep -qx 'CHANGELOG.md'; then
+            echo "CHANGELOG.md updated."
+            exit 0
+          fi
+
+          echo "::error::No CHANGELOG.md entry. Add one under [Unreleased], or apply the 'skip-changelog' label for a trivial change."
+          exit 1
+
   # Umbrella aggregator. Branch protection requires THIS single stable check
   # name, so the matrix and individual jobs above can be reshaped freely
   # without ever editing the protection rules. See docs/process/lifecycle.md.
   lint-typecheck-test:
     if: always()
-    needs: [branch_name, lint, typecheck, test]
+    needs: [branch_name, changelog, lint, typecheck, test]
     runs-on: ubuntu-latest
     steps:
       - name: Require all upstream jobs to have succeeded
         run: |
-          results="${{ needs.branch_name.result }} ${{ needs.lint.result }} ${{ needs.typecheck.result }} ${{ needs.test.result }}"
+          results="${{ needs.branch_name.result }} ${{ needs.changelog.result }} ${{ needs.lint.result }} ${{ needs.typecheck.result }} ${{ needs.test.result }}"
           echo "upstream results: ${results}"
           for r in ${results}; do
             if [ "${r}" != "success" ]; then

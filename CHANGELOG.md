@@ -16,6 +16,8 @@ whose rationale would otherwise be lost.
 
 - Dependabot now watches the `docker` ecosystem (base images in
   `docker/Dockerfile`) (#3).
+- CI requires every pull request to add a `CHANGELOG.md` entry (or carry a
+  `skip-changelog` label), gated through the `lint-typecheck-test` umbrella (#15).
 
 ### Changed
 
