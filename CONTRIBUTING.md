@@ -34,7 +34,64 @@ design proposal is a `design_doc` issue and is the RFC; see
 
 ## Branches and commits
 
-- Branch from `main`: `feature/<name>`, `fix/<name>`, or `pr/<name>`.
+- Branch from `main` using:
+
+  ```text
+  <type>/<issue-number>-<short-kebab-description>
+  ```
+
+  Examples:
+
+  ```text
+  feature/12-add-project-bootstrap-command
+  fix/18-handle-missing-roadmap-version
+  design/21-record-release-gate-decision
+  docs/34-clarify-lifecycle-step-zero
+  ```
+
+- Issue-required branch types:
+
+  | Type | Use for |
+  | --- | --- |
+  | `feature` | New user-facing or project-facing capability |
+  | `fix` | Bug fix or incorrect behavior |
+  | `design` | Architecture, ADR, lifecycle, or process design work |
+  | `refactor` | Internal restructuring without behavior change |
+  | `perf` | Performance improvement |
+  | `spike` | Time-boxed investigation or prototype |
+
+- Issue-or-`no-issue` branch types:
+
+  | Type | Use for |
+  | --- | --- |
+  | `docs` | Documentation-only changes |
+  | `test` | Test-only changes |
+  | `ci` | GitHub Actions, checks, workflows, automation |
+  | `build` | Build system, packaging, Docker, toolchain |
+  | `deps` | Dependency updates |
+  | `chore` | Low-risk maintenance that does not fit another type |
+
+- Special branch types:
+
+  | Type | Use for |
+  | --- | --- |
+  | `release` | Release preparation branch, e.g. `release/0.2.0` |
+  | `hotfix` | Urgent patch branch, e.g. `hotfix/0.2.1-fix-docs-publish` |
+
+- For trivial maintenance changes that do not need an issue, use `no-issue`:
+
+  ```text
+  docs/no-issue-fix-typo
+  ci/no-issue-pin-action-version
+  deps/no-issue-bump-ruff
+  chore/no-issue-update-codeowners-comment
+  ```
+
+- `no-issue` is only allowed for `docs`, `test`, `ci`, `build`, `deps`, and
+  `chore`. Features, bugs, design changes, refactors, performance work, and
+  spikes should have an issue.
+- Branch names are enforced in CI. Use lowercase kebab-case; do not use spaces,
+  underscores, personal names, or vague names such as `pr/foo`.
 - Commit messages: imperative mood, subject under 72 characters, the *why* in the
   body. Architecture and rationale belong in the body or an ADR, not the subject.
 - Do not add `Co-Authored-By` lines unless there was real pairing.
@@ -42,8 +99,9 @@ design proposal is a `design_doc` issue and is the RFC; see
 ## Pull requests
 
 - One logical change per PR. If the description needs "and", consider splitting.
-- Use the PR template: say `Closes #N`, restate the issue's acceptance criteria
-  as checkboxes, and tick what this PR satisfies (justify any deferral).
+- Use the PR template: say `Closes #N` for issue-linked work, or explain why the
+  PR is allowed to use `no-issue`; restate the issue's acceptance criteria as
+  checkboxes when there is a linked issue.
 - Include verification evidence (the gate passing locally).
 - If the PR makes an architectural decision, add an ADR under `docs/adr/`.
 - Merges are squash, history stays linear, branches auto-delete.
