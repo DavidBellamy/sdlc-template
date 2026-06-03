@@ -3,7 +3,7 @@ name = "sdlc-template"
 version = "0.1.0"
 description = "A process-first template repository demonstrating a complete software development lifecycle."
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 license = "Apache-2.0"
 authors = [{ name = "David Bellamy" }]
 
@@ -33,7 +33,7 @@ packages = ["src/sdlc_template"]
 # ---------------------------------------------------------------------------
 [tool.ruff]
 line-length = 100
-target-version = "py312"
+target-version = "py313"
 src = ["src", "tests"]
 
 [tool.ruff.lint]
@@ -55,7 +55,7 @@ convention = "google"
 # environment so local and CI agree.
 # ---------------------------------------------------------------------------
 [tool.ty.environment]
-python-version = "3.12"
+python-version = "3.13"
 
 [tool.ty.src]
 include = ["src", "tests"]
